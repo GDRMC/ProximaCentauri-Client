@@ -35,22 +35,26 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  *
- * Contributor(s): GDRMc
+ * Contributor(s):
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package gdr.proximacentauri;
+package gdr.proximacentauri.userdb;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import gdr.proximacentauri.security.SHA256Hash;
 import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author GDRMc
- */
-public class Run {
-    public static void main(String[]args) throws IOException, FileNotFoundException, NoSuchAlgorithmException{
-        Frame frame = new Frame();
+public class User {
+    private String username;
+    private String hashedPass;
+    
+    public User(String username,String password) throws NoSuchAlgorithmException{ 
+        this.username=username; 
+        this.hashedPass=password; 
+        //this.hashedPass=this.hash.getHashFromString(password, "SHA-256");
     }
+    
+    public String getUsername(){ return this.username; }
+    //public String getPassword(){ return this.password; }
+    public String getHashedPass(){ return this.hashedPass; }
 }

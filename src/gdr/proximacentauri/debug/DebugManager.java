@@ -35,22 +35,57 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  *
- * Contributor(s): GDRMc
+ * Contributor(s):
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package gdr.proximacentauri;
+package gdr.proximacentauri.debug;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author GDRMc
- */
-public class Run {
-    public static void main(String[]args) throws IOException, FileNotFoundException, NoSuchAlgorithmException{
-        Frame frame = new Frame();
+public class DebugManager {
+    public DebugManager(){ }
+    
+    /**
+     * Prints error message in the console, can make JOptionPane pop if displayMessage = true
+     * @param messageID 1=bad login 0=unexpected
+     * @param displayMessage if true, displays the message with jOptionPane AND console
+     * @author GDRMc
+     */
+    public void showErrorMessage(int messageID,boolean displayMessage){
+        System.out.print("ERROR_");
+        switch(messageID){
+            //1 BAD LOGIN
+            case 1: 
+                System.out.println("1 - BAD LOGIN");
+                if(displayMessage){
+                    JOptionPane.showMessageDialog(null, "Bad login, unknown username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            //0 UNEXPECTED
+            default: 
+                System.out.println("0 - UNEXPECTED ERROR");
+                JOptionPane.showMessageDialog(null, "Unexpected error", "ERROR CODE 0", JOptionPane.ERROR_MESSAGE);
+                break;
+        }
+    }
+    
+    /**
+     * Prints information message in the console, can make JOptionPane pop if displayMessage = true
+     * @param messageID 1=acces granted
+     * @param displayMessage if true, displays the message with jOptionPane AND console
+     * @author GDRMc
+     */
+    public void showInformationMessage(int messageID,boolean displayMessage){
+        System.out.print("DEBUG INFORMATION_");
+        switch(messageID){
+            //1 ACCESS GRANTED
+            case 1: 
+                System.out.println("1 - ACCESS GRANTED");
+                if(displayMessage){
+                    JOptionPane.showMessageDialog(null, "Access Granted !", "Information", JOptionPane.INFORMATION_MESSAGE);
+                }
+                break;
+        }
     }
 }

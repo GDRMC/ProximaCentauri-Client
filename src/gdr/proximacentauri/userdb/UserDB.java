@@ -35,22 +35,72 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  *
- * Contributor(s): GDRMc
+ * Contributor(s):
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package gdr.proximacentauri;
+package gdr.proximacentauri.userdb;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.StreamTokenizer;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
-/**
- *
- * @author GDRMc
- */
-public class Run {
-    public static void main(String[]args) throws IOException, FileNotFoundException, NoSuchAlgorithmException{
-        Frame frame = new Frame();
+public class UserDB {
+    private ArrayList<User>users;
+    
+    public UserDB(File file) throws FileNotFoundException, IOException, NoSuchAlgorithmException{ 
+        this.users=new ArrayList(); 
+        readDB(new FileReader(file)); 
+    }
+    
+    public boolean readDB(FileReader fic) throws IOException, NoSuchAlgorithmException
+    {
+        boolean end = false;
+	StreamTokenizer entree = new StreamTokenizer(fic);
+	if (entree.ttype ==  StreamTokenizer.TT_EOF){ return false ; }
+        while(entree.ttype != StreamTokenizer.TT_EOF){
+            entree.nextToken();
+            String bufferU=entree.sval;
+            if("!".equals(bufferU)){
+                end = true;
+                break;
+            }else{
+                entree.nextToken();
+                String bufferP=entree.sval;
+                addUserToDB(bufferU,bufferP);
+            }
+        }
+        this.users.remove(this.users.size()-1);
+        System.out.println("DB - LOADED "+this.users.size());
+        return true;
+    }
+    
+    public void addUserToDB(String bufferU, String bufferP) throws NoSuchAlgorithmException{
+        this.users.add(new User(bufferU,bufferP));
+        System.out.println("DB - ADDED "+bufferU+" WITH PASS HASH "+bufferP);
+    }
+    
+    public String getUsername(int n){
+        return this.users.get(n).getUsername();
+    }
+    
+    public String getUserHash(int n){
+        return this.users.get(n).getHashedPass();
+    }
+    
+    public int search(String username){
+        int indice=-1;
+        for(int i=0;i<this.users.size();i++){
+            if(this.users.get(i).getUsername().equals(username)){
+                indice = i;
+            }else{
+                indice = -1;
+            }
+        }
+        return indice;
     }
 }

@@ -35,22 +35,29 @@
  * Version 2 license, then the option applies only if the new code is
  * made subject to such option by the copyright holder.
  *
- * Contributor(s): GDRMc
+ * Contributor(s):
  *
  * Portions Copyrighted 2015 Sun Microsystems, Inc.
  */
-package gdr.proximacentauri;
+package gdr.proximacentauri.security;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- *
- * @author GDRMc
- */
-public class Run {
-    public static void main(String[]args) throws IOException, FileNotFoundException, NoSuchAlgorithmException{
-        Frame frame = new Frame();
+public class SHA256Hash {
+    private String hash;
+    
+    public SHA256Hash() throws NoSuchAlgorithmException{  }
+    
+    public String getHashFromString(String toHash, String algorithm) throws NoSuchAlgorithmException{ 
+        MessageDigest md = MessageDigest.getInstance(algorithm);
+        md.update(toHash.getBytes());
+        byte byteData[] = md.digest();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < byteData.length; i++) {
+            sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
     }
+    //public String returnHash(){ return this.hash; }
 }
